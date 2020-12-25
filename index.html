@@ -15,8 +15,9 @@
             <div class="col-12">
                 <div class="alert alert-primary" role="alert">
                     <ul class="m-0">
-                        <li>選擇日期後會自動產生預約時段連結</li>
                         <li>先登入運動中心後才可點選預約連結 <a href="https://scr.cyc.org.tw/tp02.aspx">[南港運動中心登入]</a></li>
+                        <li>選擇日期後會自動產生預約時段連結</li>
+                        <li>已排除季租或上課場地</li>
                     </ul>
                 </div>
             </div>
@@ -28,17 +29,27 @@
             </form>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 col-md-6" id="NG">
+                <h3>南港運動中心</h3>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h4>上午時段</h4>
-                        <div id="am"></div>
+                        <h4 class="card-title"></h4>
+                        <h5>上午時段</h5>
+                        <div class="am"></div>
+                        <h5 class="mt-2">下午時段</h5>
+                        <div class="pm"></div>
                     </div>
                 </div>
-                <div class="card">
+            </div>
+            <div class="col-12 col-md-6" id="NH">
+                <h3>內湖運動中心</h3>
+                <div class="card mb-3" id="place-card">
                     <div class="card-body">
-                        <h4>下午時段</h4>
-                        <div id="pm"></div>
+                        <h4 class="card-title"></h4>
+                        <h5>上午時段</h5>
+                        <div class="am"></div>
+                        <h5 class="mt-2">下午時段</h5>
+                        <div class="pm"></div>
                     </div>
                 </div>
             </div>
@@ -50,24 +61,66 @@
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
     </script>
     <script>
+        var NGplace = [{
+            no: 87,
+            name: 'E'
+        }, {
+            no: 88,
+            name: 'F'
+        }];
+        var NHplace = [{
+            no: 83,
+            name: '1'
+        }, {
+            no: 84,
+            name: '2'
+        }, {
+            no: 1074,
+            name: '3'
+        }, {
+            no: 87,
+            name: '5'
+        }];
+
         $(document).ready(function () {
+            var pCard = $('.card').eq(0).clone();
+            $('.card').remove();
             $('#date').change(function (e) {
+                $('#place-card').remove();
                 e.preventDefault();
                 var d = $(this).val().replace(/-/g, "/");
-                $('#am').empty();
-                for (let h = 8; h < 12; h++) {
-                    var link =
-                        '<a target="_blank" href="https://scr.cyc.org.tw/tp02.aspx?module=net_booking&files=booking_place&StepFlag=25&QPid=88&QTime=' +
-                        h + '&PT=1&D=' + d + '">' + d + ' ' + h + ':00</a>';
-                    $('#am').append(link + "<br>");
-                }
-                $('#pm').empty();
-                for (let h = 12; h < 18; h++) {
-                    var link =
-                        '<a target="_blank" href="https://scr.cyc.org.tw/tp02.aspx?module=net_booking&files=booking_place&StepFlag=25&QPid=88&QTime=' +
-                        h + '&PT=1&D=' + d + '">' + d + ' ' + h + ':00</a>';
-                    $('#pm').append(link + "<br>");
-                }
+                NGplace.forEach(p => {
+                    var pCardTemp = pCard.clone();
+                    pCardTemp.find('.card-title').html(`場地：${p.name}`)
+
+                    for (let h = 8; h < 12; h++) {
+                        var link =
+                            `<a target="_blank" href="https://scr.cyc.org.tw/tp02.aspx?module=net_booking&files=booking_place&StepFlag=25&QPid=${p.no}&QTime=${h}&PT=1&D=${d}">${d} ${h}:00</a>`;
+                        pCardTemp.find('.am').append(link + "<br>");
+                    }
+                    for (let h = 12; h < 18; h++) {
+                        var link =
+                            `<a target="_blank" href="https://scr.cyc.org.tw/tp02.aspx?module=net_booking&files=booking_place&StepFlag=25&QPid=${p.no}&QTime=${h}&PT=1&D=${d}">${d} ${h}:00</a>`;
+                        pCardTemp.find('.pm').append(link + "<br>");
+                    }
+                    pCardTemp.appendTo('#NG');
+                });
+                NHplace.forEach(p => {
+                    var pCardTemp = pCard.clone();
+                    pCardTemp.find('.card-title').html(`場地：${p.name}`)
+
+                    for (let h = 8; h < 12; h++) {
+                        var link =
+                            `<a target="_blank" href="https://scr.cyc.org.tw/tp12.aspx?module=net_booking&files=booking_place&StepFlag=25&QPid=${p.no}&QTime=${h}&PT=1&D=${d}">${d} ${h}:00</a>`;
+                        pCardTemp.find('.am').append(link + "<br>");
+                    }
+                    for (let h = 12; h < 18; h++) {
+                        var link =
+                            `<a target="_blank" href="https://scr.cyc.org.tw/tp12.aspx?module=net_booking&files=booking_place&StepFlag=25&QPid=${p.no}&QTime=${h}&PT=1&D=${d}">${d} ${h}:00</a>`;
+                        pCardTemp.find('.pm').append(link + "<br>");
+                    }
+                    pCardTemp.appendTo('#NH');
+                });
             });
 
             $('#date').val(getYYYYMMDD());
