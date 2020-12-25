@@ -86,7 +86,7 @@
             var pCard = $('.card').eq(0).clone();
             $('.card').remove();
             $('#date').change(function (e) {
-                $('#place-card').remove();
+                $('.card').remove();
                 e.preventDefault();
                 var d = $(this).val().replace(/-/g, "/");
                 NGplace.forEach(p => {
