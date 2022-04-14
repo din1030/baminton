@@ -137,6 +137,16 @@
                         pCardTemp.appendTo('#DA');
                     });
                 }
+                for (let h = 18; h < 22; h++) {
+                    var pCardTemp = pCard.clone();
+                    DAplace.forEach(p => {
+                        var link =
+                            `<a target="_blank" href="https://scr.cyc.org.tw/tp03.aspx?module=net_booking&files=booking_place&StepFlag=25&QPid=${p.no}&QTime=${h}&PT=1&D=${d}">場地${p.name}</a>`;
+                        pCardTemp.find('.court').append(link + "<br>");
+                        pCardTemp.find('.card-title').html(`${d} ${h}:00`)
+                        pCardTemp.appendTo('#DA');
+                    });
+                }
                 // for (let h = 10; h < 13; h++) {
                 //     var pCardTemp = pCard.clone();
                 //     NGplace.forEach(p => {
