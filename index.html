@@ -123,11 +123,29 @@
             // var pCard1 = $('.card').eq(1).clone();
             // $('.card').remove();
 
+            // $('#date').val(getYYYYMMDD());
+            var date1 = new Date();
+            date1.setDate(date1.getDate() + 14);
+            // document.getElementById('date').value = date1.toISOString().substring(0, 10);
+            // console.log(date1.toISOString().substring(0, 10));
+            var day_list = ['日', '一', '二', '三', '四', '五', '六'];
+
+            var day = date1.getDay();
+
+            var td = date1.toISOString().substring(0, 10);
+
+            $('#date').val(td);
+            $("#target-date").html(td + "（" + day_list[day] + "）")
+
             $('#date').change(function (e) {
-                $('.card').remove();
+                $('.card-wrap').remove();
                 e.preventDefault();
                 var d = $(this).val().replace(/-/g, "/");
-                for (let h = 9; h < 13; h++) {
+                var wd = new Date($(this).val()).getDay();
+                var max_hour = (wd == 0 || wd == 6) ? 18 : 13;
+                console.log(wd);
+                console.log(max_hour);
+                for (let h = 9; h < max_hour; h++) {
                     var pCardTemp = pCard.clone();
                     DAplace.forEach(p => {
                         var link =
@@ -201,21 +219,7 @@
                 // });
             });
 
-            // $('#date').val(getYYYYMMDD());
-            var date1 = new Date();
-            date1.setDate(date1.getDate() + 14);
-            // document.getElementById('date').value = date1.toISOString().substring(0, 10);
-            // console.log(date1.toISOString().substring(0, 10));
-            var day_list = ['日', '一', '二', '三', '四', '五', '六'];
-
-            var day = date1.getDay(); // or "new Date().getDay()";
-
-            var td = date1.toISOString().substring(0, 10);
-
-            $('#date').val(td);
-            $("#target-date").html(td + "（" + day_list[day] + "）")
             $('#date').trigger('change');
-
         });
 
 
